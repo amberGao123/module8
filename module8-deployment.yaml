@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: module8-deployment
+  namespace: module
+  labels:
+    app: module8
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: module8
+  template:
+    metadata:
+      labels:
+        app: module8
+    spec:
+      containers:
+        - name: module8
+          image: module8
+          env:
+            - name: VERSION
+              value: demo
+          lifecycle:     
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 10"]  # 睡眠10s之后再退出
+          livenessProbe:
+            httpGet:
+              path: /healthz                       # 探针
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3                    # 探针失败3次 整个容器启动失败
+            successThreshold: 1                    # 探针成功1次 整个容器启动成功
+          resources:                               # 资源 
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+            - name: log-volume                    # 日志
+              mountPath: /app/logs
+            - name: app-config
+              mountPath: /app/server.toml         # 配置文件
+              readOnly: true
+              subPath: server.toml
+      volumes:
+        - name: log-volume
+          emptyDir: {}
+        - name: app-config
+          configMap:
+            name: module8-config
