@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: module8
-          image: module8
+          image: gaojingwen/module8:v7
           env:
             - name: VERSION
               value: demo
