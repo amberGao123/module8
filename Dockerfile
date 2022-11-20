@@ -8,16 +8,20 @@ RUN go env -w GOPROXY=https://goproxy.cn,direct
 WORKDIR /app
 # 拷贝
 COPY . /app/
+COPY *.toml /app/
 # 编译二进制文件
 RUN go build -v -o /bin/module8 ./main.go
 
 # 基础镜像
 FROM alpine
+# 工作目录
+WORKDIR /app
+COPY *.toml /app/
 # 拷贝二进制文件
 COPY --from=builder /bin/module8 /bin/module8
 # 暴露的端口
 EXPOSE 8080
 # 指定容器启动程序
-ENTRYPOINT [ "/bin/module8" ]
+# ENTRYPOINT [ "/bin/module8" ]
 # 启动参数
-CMD ["--config=./server.toml"]
+CMD /bin/module8 --config=/app/server.toml
