@@ -5,8 +5,8 @@ import (
 	"flag"
 	"net/http"
 
-	"module8/api"
-	"module8/handler"
+	"module8/code/api"
+	"module8/code/handler"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
