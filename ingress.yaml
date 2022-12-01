@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: module8-ingress
+  namespace: module
+spec:
+  rules:
+    - host: amber.com
+      http:
+        paths:
+          - backend:
+              serviceName: module8-svc
+              servicePort: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - amber.com
+      secretName: module8-tls

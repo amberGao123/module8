@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: module8-svc
+  namespace: module
+spec:
+  ports:
+    - name: module8-svc
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: module8
+  type: ClusterIP
